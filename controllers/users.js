@@ -39,3 +39,20 @@ module.exports.login = (req, res) => {
     })
     .catch((e) => res.status(400).send({ message: e.message, name: e.name }));
 };
+
+module.exports.updateProfile = (req, res) => {
+  const { email, name } = req.body;
+
+  Users.findByIdAndUpdate(
+    req.user._id,
+    { email, name },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((e) => res.status(400).send({ message: e.message }));
+};
