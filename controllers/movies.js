@@ -1,6 +1,8 @@
 const Movies = require('../models/movies');
+const { BadRequestError } = require('../scripts/errors/BadRequestError');
+const { SUCCESS_CODE } = require('../scripts/utils');
 
-module.exports.addMovie = (req, res) => {
+module.exports.addMovie = (req, res, next) => {
   const {
     country,
     director,
@@ -29,18 +31,25 @@ module.exports.addMovie = (req, res) => {
     movieId,
     owner: req.user._id,
   })
-    .then((movie) => res.status(200).send(movie))
-    .catch((e) => res.status(400).send({ message: e.message }));
+    .then((movie) => res.status(SUCCESS_CODE).send(movie))
+    .catch((e) => {
+      if (e.name === 'ValidationError') {
+        const type = Object.keys(e.errors);
+        return next(new BadRequestError(`Неверный формат либо отсутствие данных: ${type}`));
+      }
+
+      next(e);
+    });
 };
 
-module.exports.getMovies = (req, res) => {
+module.exports.getMovies = (req, res, next) => {
   Movies.find({ owner: req.user._id })
     .populate('owner')
-    .then((data) => res.status(200).send(data))
-    .catch((e) => res.status(400).send({ message: e.message }));
+    .then((data) => res.status(SUCCESS_CODE).send(data))
+    .catch(next);
 };
 
-module.exports.deleteMovie = (req, res) => {
+module.exports.deleteMovie = (req, res, next) => {
   const { id } = req.params;
 
   Movies.findById(id)
@@ -54,7 +63,12 @@ module.exports.deleteMovie = (req, res) => {
       }
 
       Movies.deleteOne({ _id: id })
-        .then(() => res.status(200).send({ message: 'фильм успешно удален' }));
+        .then(() => res.status(SUCCESS_CODE).send({ message: 'фильм успешно удален' }));
     })
-    .catch((e) => res.status(400).send({ message: e.message }));
+    .catch((e) => {
+      if (e.name === 'CastError') {
+        return next(new BadRequestError('Неверный id карточки'));
+      }
+      next(e);
+    });
 };
