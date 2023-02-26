@@ -1,8 +1,13 @@
-const SUCCESS_CODE = 200;
+const rateLimit = require('express-rate-limit');
+const { PERIOD_MINUTES_10 } = require('./constants');
 
-const urlRegexPattern = new RegExp(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/);
+const apiLimiter = rateLimit({
+  windowMs: PERIOD_MINUTES_10,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 module.exports = {
-  SUCCESS_CODE,
-  urlRegexPattern,
+  apiLimiter,
 };

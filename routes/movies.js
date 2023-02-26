@@ -1,7 +1,7 @@
 const moviesRouter = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const { getMovies, addMovie, deleteMovie } = require('../controllers/movies');
-const { urlRegexPattern } = require('../scripts/utils');
+const { urlRegexPattern } = require('../scripts/constants');
 
 moviesRouter.get('/', getMovies);
 moviesRouter.post('/', celebrate({

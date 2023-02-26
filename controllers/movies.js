@@ -1,6 +1,7 @@
 const Movies = require('../models/movies');
 const { BadRequestError } = require('../scripts/errors/BadRequestError');
-const { SUCCESS_CODE } = require('../scripts/utils');
+const { SUCCESS_CODE } = require('../scripts/constants');
+const { AuthoritiesError } = require('../scripts/errors/AuthoritiesError');
 
 module.exports.addMovie = (req, res, next) => {
   const {
@@ -59,7 +60,7 @@ module.exports.deleteMovie = (req, res, next) => {
       const userId = `"${req.user._id}"`;
 
       if (ownerId !== userId) {
-        return Promise.reject(new Error('Нет прав на удаление этого фильма'));
+        return Promise.reject(new AuthoritiesError('Нет прав на удаление этого фильма'));
       }
 
       Movies.deleteOne({ _id: id })

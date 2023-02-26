@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Users = require('../models/users');
 const { NotFoundError } = require('../scripts/errors/NotFound');
 const { BadRequestError } = require('../scripts/errors/BadRequestError');
-const { SUCCESS_CODE } = require('../scripts/utils');
+const { SUCCESS_CODE } = require('../scripts/constants');
 const { RegistrationError } = require('../scripts/errors/RegistrationError');
 
 module.exports.getProfile = (req, res, next) => {
@@ -24,7 +24,10 @@ module.exports.createUser = (req, res, next) => {
         email,
         password: hash,
       })
-        .then((user) => res.status(SUCCESS_CODE).send(user))
+        .then((user) => {
+          user.password = undefined;
+          res.status(SUCCESS_CODE).send(user);
+        })
         .catch((e) => {
           if (e.code === 11000) {
             return next(new RegistrationError('Данный email уже зарегистрирован'));
