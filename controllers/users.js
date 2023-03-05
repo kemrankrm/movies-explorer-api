@@ -10,8 +10,18 @@ module.exports.getProfile = (req, res, next) => {
   const id = req.user._id;
 
   Users.findById(id)
-    .then((user) => res.status(SUCCESS_CODE).send(user))
-    .catch(next);
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError(`Пользователь id:${id} не найден`);
+      }
+      return res.status(SUCCESS_CODE).send(user);
+    })
+    .catch((e) => {
+      if (e.name === 'CastError') {
+        return next(new BadRequestError('Неверные данные id'));
+      }
+      next(e);
+    });
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -31,17 +41,14 @@ module.exports.createUser = (req, res, next) => {
         })
         .catch((e) => {
           if (e.code === 11000) {
-            return next(new RegistrationError('Данный email уже зарегистрирован'));
+            return next(new RegistrationError('Такой email уже зарегистрирован'));
           }
 
           if (e.name === 'ValidationError') {
-            const type = Object.keys(e.errors);
-            const { message } = e.errors[type];
-
-            return next(new BadRequestError(message));
+            return next(new BadRequestError('Введены неверные данные'));
           }
 
-          next(e);
+          return next(e);
         });
     });
 };
@@ -80,12 +87,8 @@ module.exports.updateProfile = (req, res, next) => {
     })
     .catch((e) => {
       if (e.name === 'ValidationError') {
-        const type = Object.keys(e.errors);
-        const { message } = e.errors[type];
-
-        return next(new BadRequestError(message));
+        return next(new BadRequestError('Формат данных неверный'));
       }
-
       next(e);
     });
 };
