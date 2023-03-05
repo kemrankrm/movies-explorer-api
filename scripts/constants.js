@@ -4,10 +4,11 @@ const PERIOD_MINUTES_10 = 600000;
 const urlRegexPattern = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
 const allowedCors = [
-  'https://kemrankrm-fe.nomoredomains.work',
-  'http://kemrankrm-fe.nomoredomains.work',
+  'https://diploma-kk.nomoredomains.work',
+  'http://diploma-kk.nomoredomains.work',
   'localhost:3000',
   'localhost:3001',
+  'http://localhost:3001',
   'http://localhost:3001',
 ];
 
