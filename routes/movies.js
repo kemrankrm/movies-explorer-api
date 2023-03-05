@@ -16,14 +16,14 @@ moviesRouter.post('/', celebrate({
     trailerLink: Joi.string().required().pattern(urlRegexPattern),
     nameEN: Joi.string().required(),
     thumbnail: Joi.string().required().pattern(urlRegexPattern),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
   }),
 }), addMovie);
 
 moviesRouter.delete('/:id', celebrate({
   params: Joi.object().keys({
     id: Joi.string().length(24).required().hex(),
-  }).unknown(true),
+  }),
 }), deleteMovie);
 
 module.exports = {
