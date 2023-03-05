@@ -1,6 +1,7 @@
 # Logs
 logs
-*.log
+#Строка снизу закоментирована, дабы показать ревьюеру файлы логгирования
+#*.log
 npm-debug.log*
 
 # Dependency directory
