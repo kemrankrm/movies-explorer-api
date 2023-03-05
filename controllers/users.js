@@ -20,7 +20,7 @@ module.exports.getProfile = (req, res, next) => {
       if (e.name === 'CastError') {
         return next(new BadRequestError('Неверные данные id'));
       }
-      next(e);
+      return next(e);
     });
 };
 
@@ -86,6 +86,6 @@ module.exports.updateProfile = (req, res, next) => {
       if (e.name === 'ValidationError') {
         return next(new BadRequestError('Формат данных неверный'));
       }
-      next(e);
+      return next(e);
     });
 };

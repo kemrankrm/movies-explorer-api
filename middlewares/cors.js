@@ -22,7 +22,7 @@ const allowRequest = (req, res, next) => {
     return res.end();
   }
 
-  next();
+  return next();
 };
 
 module.exports = {
