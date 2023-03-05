@@ -8,4 +8,3 @@ class AuthoritiesError extends Error {
 module.exports = {
   AuthoritiesError,
 };
-

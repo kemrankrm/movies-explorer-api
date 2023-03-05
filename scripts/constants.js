@@ -1,4 +1,3 @@
-/* eslint-disable prefer-regex-literals */
 const SUCCESS_CODE = 200;
 const PERIOD_MINUTES_10 = 600000;
 

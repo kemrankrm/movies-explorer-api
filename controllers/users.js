@@ -25,6 +25,7 @@ module.exports.createUser = (req, res, next) => {
         password: hash,
       })
         .then((user) => {
+          const
           user.password = undefined;
           res.status(SUCCESS_CODE).send(user);
         })
