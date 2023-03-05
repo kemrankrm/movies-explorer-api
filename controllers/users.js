@@ -28,28 +28,25 @@ module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
 
   bcrypt.hash(password, 10)
-    .then((hash) => {
-      Users.create({
-        name,
-        email,
-        password: hash,
-      })
-        .then((user) => {
-          const data = user;
-          data.password = undefined;
-          return res.status(SUCCESS_CODE).send(data);
-        })
-        .catch((e) => {
-          if (e.code === 11000) {
-            return next(new RegistrationError('Такой email уже зарегистрирован'));
-          }
+    .then((hash) => Users.create({
+      name, email, password: hash,
+    }))
+    .then((user) => {
+      const data = user;
+      data.password = undefined;
 
-          if (e.name === 'ValidationError') {
-            return next(new BadRequestError('Введены неверные данные'));
-          }
+      res.status(SUCCESS_CODE).send(data);
+    })
+    .catch((e) => {
+      if (e.code === 11000) {
+        return next(new RegistrationError('Такой email уже зарегистрирован'));
+      }
 
-          return next(e);
-        });
+      if (e.name === 'ValidationError') {
+        return next(new BadRequestError('Введены неверные данные'));
+      }
+
+      return next(e);
     });
 };
 
