@@ -68,7 +68,8 @@ module.exports.deleteMovie = (req, res, next) => {
       }
 
       return Movies.deleteOne({ _id: id })
-        .then(() => res.status(SUCCESS_CODE).send({ message: 'фильм успешно удален' }));
+        .then(() => res.status(SUCCESS_CODE).send({ message: 'фильм успешно удален' }))
+        .catch(next);
     })
     .catch((e) => {
       if (e.name === 'CastError') {
