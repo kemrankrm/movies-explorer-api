@@ -86,6 +86,11 @@ module.exports.updateProfile = (req, res, next) => {
       if (e.name === 'ValidationError') {
         return next(new BadRequestError('Формат данных неверный'));
       }
+
+      if (e.code === 11000) {
+        return next(new BadRequestError('Данный email занят'));
+      }
+
       return next(e);
     });
 };
